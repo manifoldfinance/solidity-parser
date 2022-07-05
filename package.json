@@ -1,6 +1,6 @@
 {
-  "name": "@solidity-parser/parser",
-  "version": "0.14.1",
+  "name": "@d1ll0n/solidity-parser",
+  "version": "0.0.1",
   "description": "A Solidity parser built from a robust ANTLR 4 grammar",
   "main": "dist/index.cjs.js",
   "browser": {
@@ -34,10 +34,10 @@
     "Gonçalo Sá <goncalo.sa@consensys.net>",
     "Federico Bond <federicobond@gmail.com>"
   ],
-  "homepage": "https://github.com/solidity-parser/parser",
+  "homepage": "https://github.com/d1ll0n/solidity-parser",
   "repository": {
     "type": "git",
-    "url": "https://github.com/solidity-parser/parser"
+    "url": "https://github.com/d1ll0n/solidity-parser"
   },
   "license": "MIT",
   "dependencies": {
