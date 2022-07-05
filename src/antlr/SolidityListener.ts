@@ -45,6 +45,7 @@ import { MappingKeyContext } from "./SolidityParser";
 import { MappingContext } from "./SolidityParser";
 import { FunctionTypeNameContext } from "./SolidityParser";
 import { StorageLocationContext } from "./SolidityParser";
+import { CoderTypeContext } from "./SolidityParser";
 import { StateMutabilityContext } from "./SolidityParser";
 import { BlockContext } from "./SolidityParser";
 import { StatementContext } from "./SolidityParser";
@@ -569,6 +570,17 @@ export interface SolidityListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	exitStorageLocation?: (ctx: StorageLocationContext) => void;
+
+	/**
+	 * Enter a parse tree produced by `SolidityParser.coderType`.
+	 * @param ctx the parse tree
+	 */
+	enterCoderType?: (ctx: CoderTypeContext) => void;
+	/**
+	 * Exit a parse tree produced by `SolidityParser.coderType`.
+	 * @param ctx the parse tree
+	 */
+	exitCoderType?: (ctx: CoderTypeContext) => void;
 
 	/**
 	 * Enter a parse tree produced by `SolidityParser.stateMutability`.

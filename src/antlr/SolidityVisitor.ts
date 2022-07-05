@@ -45,6 +45,7 @@ import { MappingKeyContext } from "./SolidityParser";
 import { MappingContext } from "./SolidityParser";
 import { FunctionTypeNameContext } from "./SolidityParser";
 import { StorageLocationContext } from "./SolidityParser";
+import { CoderTypeContext } from "./SolidityParser";
 import { StateMutabilityContext } from "./SolidityParser";
 import { BlockContext } from "./SolidityParser";
 import { StatementContext } from "./SolidityParser";
@@ -404,6 +405,13 @@ export interface SolidityVisitor<Result> extends ParseTreeVisitor<Result> {
 	 * @return the visitor result
 	 */
 	visitStorageLocation?: (ctx: StorageLocationContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by `SolidityParser.coderType`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitCoderType?: (ctx: CoderTypeContext) => Result;
 
 	/**
 	 * Visit a parse tree produced by `SolidityParser.stateMutability`.

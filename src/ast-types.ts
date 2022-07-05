@@ -161,6 +161,7 @@ export interface StructDefinition extends BaseASTNode {
   type: 'StructDefinition'
   name: string
   members: VariableDeclaration[]
+  coderType?: 'unchecked' | 'checked' | 'exact'
 }
 export interface ModifierDefinition extends BaseASTNode {
   type: 'ModifierDefinition'
@@ -232,6 +233,7 @@ export interface VariableDeclaration extends BaseASTNode {
   isDeclaredConst?: boolean
   storageLocation: string | null
   expression: Expression | null
+  coderType?: 'unchecked' | 'checked' | 'exact'
   visibility?: 'public' | 'private' | 'internal' | 'default'
 }
 export interface StateVariableDeclarationVariable extends VariableDeclaration {

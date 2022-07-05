@@ -158,6 +158,12 @@ export class ASTBuilder
       storageLocation = this._toText(ctxStorageLocation)
     }
 
+    let coderType: 'unchecked' | 'checked' | 'exact' = 'checked'
+    const ctxCoderType = ctx.coderType()
+    if (ctxCoderType) {
+      coderType = this._toText(ctxCoderType) as typeof coderType
+    }
+
     const identifierCtx = ctx.identifier()
 
     const node: AST.VariableDeclaration = {
@@ -169,6 +175,7 @@ export class ASTBuilder
       isStateVar: false,
       isIndexed: false,
       expression: null,
+      coderType
     }
 
     return this._addMeta(node, ctx)
@@ -787,12 +794,18 @@ export class ASTBuilder
   public visitStructDefinition(
     ctx: SP.StructDefinitionContext
   ): AST.StructDefinition & WithMeta {
+    let coderType: 'unchecked' | 'checked' | 'exact' = 'checked'
+    const ctxCoderType = ctx.coderType()
+    if (ctxCoderType) {
+      coderType = this._toText(ctxCoderType) as typeof coderType
+    }
     const node: AST.StructDefinition = {
       type: 'StructDefinition',
       name: this._toText(ctx.identifier()),
       members: ctx
         .variableDeclaration()
         .map((x) => this.visitVariableDeclaration(x)),
+      coderType,
     }
 
     return this._addMeta(node, ctx)
