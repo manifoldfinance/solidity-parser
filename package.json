@@ -11,7 +11,7 @@
     "dist/**/*",
     "src/**/*"
   ],
-  "types": "dist/src/index.d.ts",
+  "types": "dist/index.d.ts",
   "scripts": {
     "antlr": "antlr4ts -visitor antlr/Solidity.g4 -o src",
     "build:browser": "esbuild src/index.ts --outfile=dist/index.iife.js --bundle --loader:.tokens=file --sourcemap --format=iife --global-name=SolidityParser --define:__dirname=true --define:BROWSER=true --inject:./process-shim.js",
