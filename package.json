@@ -41,6 +41,7 @@
   },
   "license": "MIT",
   "dependencies": {
+    "@types/antlr4": "^4.7.2",
     "antlr4ts": "^0.5.0-alpha.4"
   },
   "devDependencies": {
