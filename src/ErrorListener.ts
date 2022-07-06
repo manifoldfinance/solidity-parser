@@ -1,7 +1,20 @@
-import { ErrorListener } from 'antlr4/src/antlr4/error/ErrorListener'
+/* eslint-disable @typescript-eslint/no-empty-function */
+class ErrorListener {
+  syntaxError(recognizer, offendingSymbol, line, column, msg, e) {
+  }
 
-class MyErrorListener extends ErrorListener {
-  private _errors: any[]
+  reportAmbiguity(recognizer, dfa, startIndex, stopIndex, exact, ambigAlts, configs) {
+  }
+
+  reportAttemptingFullContext(recognizer, dfa, startIndex, stopIndex, conflictingAlts, configs) {
+  }
+
+  reportContextSensitivity(recognizer, dfa, startIndex, stopIndex, prediction, configs) {
+  }
+}
+
+export default class MyErrorListener extends ErrorListener {
+  _errors
 
   constructor() {
     super()
@@ -10,16 +23,16 @@ class MyErrorListener extends ErrorListener {
   }
 
   syntaxError(
-    recognizer: any,
-    offendingSymbol: any,
-    line: number,
-    column: number,
-    message: string
+    recognizer,
+    offendingSymbol,
+    line,
+    column,
+    message
   ) {
     this._errors.push({ message, line, column })
   }
 
-  getErrors(): any[] {
+  getErrors() {
     return this._errors
   }
 
@@ -27,5 +40,3 @@ class MyErrorListener extends ErrorListener {
     return this._errors.length > 0
   }
 }
-
-export default MyErrorListener
