@@ -150,7 +150,8 @@ export class ASTBuilder
   }
 
   public visitVariableDeclaration(
-    ctx: SP.VariableDeclarationContext
+    ctx: SP.VariableDeclarationContext,
+    parentCoderType?: AST.CoderType
   ): AST.VariableDeclaration & WithMeta {
     let storageLocation: string | null = null
     const ctxStorageLocation = ctx.storageLocation()
@@ -158,7 +159,7 @@ export class ASTBuilder
       storageLocation = this._toText(ctxStorageLocation)
     }
 
-    let coderType: 'unchecked' | 'checked' | 'exact' = 'checked'
+    let coderType: AST.CoderType = parentCoderType
     const ctxCoderType = ctx.coderType()
     if (ctxCoderType) {
       coderType = this._toText(ctxCoderType) as typeof coderType
@@ -804,7 +805,7 @@ export class ASTBuilder
       name: this._toText(ctx.identifier()),
       members: ctx
         .variableDeclaration()
-        .map((x) => this.visitVariableDeclaration(x)),
+        .map((x) => this.visitVariableDeclaration(x, coderType)),
       coderType,
     }
 
