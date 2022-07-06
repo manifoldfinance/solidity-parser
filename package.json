@@ -2,21 +2,18 @@
   "name": "@d1ll0n/solidity-parser",
   "version": "0.0.1",
   "description": "A Solidity parser built from a robust ANTLR 4 grammar",
-  "main": "dist/index.cjs.js",
+  "main": "dist/index.js",
   "browser": {
     "fs": false,
     "path": false
   },
-  "files": [
-    "dist/**/*",
-    "src/**/*"
-  ],
+  "files": ["dist/**/*"],
   "types": "dist/index.d.ts",
   "scripts": {
     "antlr": "antlr4ts -visitor antlr/Solidity.g4 -o src",
     "build:browser": "esbuild src/index.ts --outfile=dist/index.iife.js --bundle --loader:.tokens=file --sourcemap --format=iife --global-name=SolidityParser --define:__dirname=true --define:BROWSER=true --inject:./process-shim.js",
     "build:node": "esbuild src/index.ts --outfile=dist/index.cjs.js --bundle  --loader:.tokens=file --sourcemap --format=cjs --platform=node --target=node12",
-    "build": "rimraf dist && npm run build:node && npm run build:browser && npm run generate-types && npm run copy-files",
+    "build": "rimraf dist && npm run generate-types && npm run copy-files",
     "generate-types": "tsc --project ./tsconfig.build.json",
     "copy-files": "shx mkdir -p dist/antlr && shx cp './src/antlr/*tokens' dist/antlr",
     "prettier": "prettier --write 'src/**/*' 'test/**/*'",
