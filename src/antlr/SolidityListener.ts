@@ -22,6 +22,8 @@ import { CustomErrorDefinitionContext } from "./SolidityParser";
 import { TypeDefinitionContext } from "./SolidityParser";
 import { UsingForDeclarationContext } from "./SolidityParser";
 import { UsingForObjectContext } from "./SolidityParser";
+import { GroupMemberDeclarationContext } from "./SolidityParser";
+import { GroupDefinitionContext } from "./SolidityParser";
 import { StructDefinitionContext } from "./SolidityParser";
 import { ModifierDefinitionContext } from "./SolidityParser";
 import { ModifierInvocationContext } from "./SolidityParser";
@@ -39,6 +41,11 @@ import { EventParameterContext } from "./SolidityParser";
 import { FunctionTypeParameterListContext } from "./SolidityParser";
 import { FunctionTypeParameterContext } from "./SolidityParser";
 import { VariableDeclarationContext } from "./SolidityParser";
+import { StructVariableDeclarationContext } from "./SolidityParser";
+import { StructVariableAccessorsContext } from "./SolidityParser";
+import { AccessorsContext } from "./SolidityParser";
+import { GetDeclarationContext } from "./SolidityParser";
+import { SetDeclarationContext } from "./SolidityParser";
 import { TypeNameContext } from "./SolidityParser";
 import { UserDefinedTypeNameContext } from "./SolidityParser";
 import { MappingKeyContext } from "./SolidityParser";
@@ -319,6 +326,28 @@ export interface SolidityListener extends ParseTreeListener {
 	exitUsingForObject?: (ctx: UsingForObjectContext) => void;
 
 	/**
+	 * Enter a parse tree produced by `SolidityParser.groupMemberDeclaration`.
+	 * @param ctx the parse tree
+	 */
+	enterGroupMemberDeclaration?: (ctx: GroupMemberDeclarationContext) => void;
+	/**
+	 * Exit a parse tree produced by `SolidityParser.groupMemberDeclaration`.
+	 * @param ctx the parse tree
+	 */
+	exitGroupMemberDeclaration?: (ctx: GroupMemberDeclarationContext) => void;
+
+	/**
+	 * Enter a parse tree produced by `SolidityParser.groupDefinition`.
+	 * @param ctx the parse tree
+	 */
+	enterGroupDefinition?: (ctx: GroupDefinitionContext) => void;
+	/**
+	 * Exit a parse tree produced by `SolidityParser.groupDefinition`.
+	 * @param ctx the parse tree
+	 */
+	exitGroupDefinition?: (ctx: GroupDefinitionContext) => void;
+
+	/**
 	 * Enter a parse tree produced by `SolidityParser.structDefinition`.
 	 * @param ctx the parse tree
 	 */
@@ -504,6 +533,61 @@ export interface SolidityListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	exitVariableDeclaration?: (ctx: VariableDeclarationContext) => void;
+
+	/**
+	 * Enter a parse tree produced by `SolidityParser.structVariableDeclaration`.
+	 * @param ctx the parse tree
+	 */
+	enterStructVariableDeclaration?: (ctx: StructVariableDeclarationContext) => void;
+	/**
+	 * Exit a parse tree produced by `SolidityParser.structVariableDeclaration`.
+	 * @param ctx the parse tree
+	 */
+	exitStructVariableDeclaration?: (ctx: StructVariableDeclarationContext) => void;
+
+	/**
+	 * Enter a parse tree produced by `SolidityParser.structVariableAccessors`.
+	 * @param ctx the parse tree
+	 */
+	enterStructVariableAccessors?: (ctx: StructVariableAccessorsContext) => void;
+	/**
+	 * Exit a parse tree produced by `SolidityParser.structVariableAccessors`.
+	 * @param ctx the parse tree
+	 */
+	exitStructVariableAccessors?: (ctx: StructVariableAccessorsContext) => void;
+
+	/**
+	 * Enter a parse tree produced by `SolidityParser.accessors`.
+	 * @param ctx the parse tree
+	 */
+	enterAccessors?: (ctx: AccessorsContext) => void;
+	/**
+	 * Exit a parse tree produced by `SolidityParser.accessors`.
+	 * @param ctx the parse tree
+	 */
+	exitAccessors?: (ctx: AccessorsContext) => void;
+
+	/**
+	 * Enter a parse tree produced by `SolidityParser.getDeclaration`.
+	 * @param ctx the parse tree
+	 */
+	enterGetDeclaration?: (ctx: GetDeclarationContext) => void;
+	/**
+	 * Exit a parse tree produced by `SolidityParser.getDeclaration`.
+	 * @param ctx the parse tree
+	 */
+	exitGetDeclaration?: (ctx: GetDeclarationContext) => void;
+
+	/**
+	 * Enter a parse tree produced by `SolidityParser.setDeclaration`.
+	 * @param ctx the parse tree
+	 */
+	enterSetDeclaration?: (ctx: SetDeclarationContext) => void;
+	/**
+	 * Exit a parse tree produced by `SolidityParser.setDeclaration`.
+	 * @param ctx the parse tree
+	 */
+	exitSetDeclaration?: (ctx: SetDeclarationContext) => void;
 
 	/**
 	 * Enter a parse tree produced by `SolidityParser.typeName`.

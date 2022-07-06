@@ -149,20 +149,65 @@ export class ASTBuilder
     return this._addMeta(node, ctx)
   }
 
+  public visitAccessors(
+    ctx: SP.AccessorsContext,
+    parentCoderType?: AST.CoderType
+  ): AST.AccessorsDefinition & WithMeta {
+    const ctxGetDeclaration = ctx.getDeclaration()
+    const ctxSetDeclaration = ctx.setDeclaration()
+    const node: AST.AccessorsDefinition = { type: 'AccessorsDefinition' };
+    if (ctxGetDeclaration) {
+      const ctxCoderType = ctxGetDeclaration.coderType();
+      node.getterCoderType = ctxCoderType
+        ? this._toText(ctxCoderType) as AST.CoderType
+        : parentCoderType;
+    }
+    if (ctxSetDeclaration) {
+      const ctxCoderType = ctxSetDeclaration.coderType();
+      node.setterCoderType = ctxCoderType
+        ? this._toText(ctxCoderType) as AST.CoderType
+        : parentCoderType;
+    }
+    return this._addMeta(node, ctx)
+  }
+
+  public visitStructVariableAccessors(
+    ctx: SP.StructVariableAccessorsContext,
+    parentCoderType?: AST.CoderType
+  ): AST.AccessorsDefinition & WithMeta {
+    const ctxAccessors = ctx.accessors();
+    if (ctxAccessors) {
+      return this.visitAccessors(ctxAccessors, parentCoderType)
+    }
+    const node: AST.AccessorsDefinition = { type: 'AccessorsDefinition' };
+    return this._addMeta(node, ctx)
+  }
+
+  public visitStructVariableDeclaration(
+    ctx: SP.StructVariableDeclarationContext,
+    parentCoderType?: AST.CoderType
+  ): AST.VariableDeclaration & WithMeta {
+    const variableDeclaration = this.visitVariableDeclaration(
+      ctx.variableDeclaration(),
+    );
+    const ctxAccessorsBlock = ctx.structVariableAccessors()
+    if (ctxAccessorsBlock) {
+      variableDeclaration.accessors = this.visitStructVariableAccessors(
+        ctxAccessorsBlock,
+        variableDeclaration.coderType || parentCoderType
+      );
+    }
+    
+    return variableDeclaration;
+  }
+
   public visitVariableDeclaration(
     ctx: SP.VariableDeclarationContext,
-    parentCoderType?: AST.CoderType
   ): AST.VariableDeclaration & WithMeta {
     let storageLocation: string | null = null
     const ctxStorageLocation = ctx.storageLocation()
     if (ctxStorageLocation) {
       storageLocation = this._toText(ctxStorageLocation)
-    }
-
-    let coderType: AST.CoderType = parentCoderType
-    const ctxCoderType = ctx.coderType()
-    if (ctxCoderType) {
-      coderType = this._toText(ctxCoderType) as typeof coderType
     }
 
     const identifierCtx = ctx.identifier()
@@ -176,7 +221,11 @@ export class ASTBuilder
       isStateVar: false,
       isIndexed: false,
       expression: null,
-      coderType
+    }
+
+    const ctxCoderType = ctx.coderType()
+    if (ctxCoderType) {
+      node.coderType = this._toText(ctxCoderType) as AST.CoderType
     }
 
     return this._addMeta(node, ctx)
@@ -792,21 +841,69 @@ export class ASTBuilder
     return this._addMeta(node, ctx)
   }
 
+  public visitGroupMemberDeclaration(
+    ctx: SP.GroupMemberDeclarationContext
+  ): AST.GroupMemberDeclaration & WithMeta {
+    const node: AST.GroupMemberDeclaration = {
+      type: 'GroupMemberDeclaration',
+      name: this._toText(ctx.identifier()),
+    }
+    const ctxCoderType = ctx.coderType()
+    if (ctxCoderType) {
+      node.coderType = this._toText(ctxCoderType) as AST.CoderType
+    }
+
+    return this._addMeta(node, ctx)
+  }
+
+  public visitGroupDefinition(
+    ctx: SP.GroupDefinitionContext,
+    parentCoderType?: AST.CoderType
+  ): AST.GroupDefinition & WithMeta {
+    const node: AST.GroupDefinition = {
+      type: 'GroupDefinition',
+      name: this._toText(ctx.identifier()),
+      members: ctx.groupMemberDeclaration().map(
+        (member) => this.visitGroupMemberDeclaration(member)
+      )
+    }
+
+    const ctxCoderType = ctx.coderType()
+    if (ctxCoderType) {
+      node.coderType = this._toText(ctxCoderType) as AST.CoderType
+    }
+
+    const ctxAccessors = ctx.accessors();
+    if (ctxAccessors) {
+      node.accessors = this.visitAccessors(ctxAccessors, parentCoderType);
+    }
+
+    return this._addMeta(node, ctx)
+  }
+
   public visitStructDefinition(
     ctx: SP.StructDefinitionContext
   ): AST.StructDefinition & WithMeta {
-    let coderType: 'unchecked' | 'checked' | 'exact' = 'checked'
+    let coderType: AST.CoderType = 'checked'
     const ctxCoderType = ctx.coderType()
     if (ctxCoderType) {
-      coderType = this._toText(ctxCoderType) as typeof coderType
+      coderType = this._toText(ctxCoderType) as AST.CoderType
     }
+
     const node: AST.StructDefinition = {
       type: 'StructDefinition',
       name: this._toText(ctx.identifier()),
       members: ctx
-        .variableDeclaration()
-        .map((x) => this.visitVariableDeclaration(x, coderType)),
+        .structVariableDeclaration()
+        .map((x) => this.visitStructVariableDeclaration(x, coderType)),
       coderType,
+      groups: ctx.groupDefinition()
+        .map((group) => this.visitGroupDefinition(group, coderType))
+    }
+
+    const ctxAccessors = ctx.accessors();
+    if (ctxAccessors) {
+      node.accessors = this.visitAccessors(ctxAccessors, coderType);
     }
 
     return this._addMeta(node, ctx)

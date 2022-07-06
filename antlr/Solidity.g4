@@ -88,9 +88,15 @@ usingForObject
   : userDefinedTypeName
   | '{' userDefinedTypeName ( ',' userDefinedTypeName )* '}';
 
+groupMemberDeclaration : identifier coderType? ';';
+
+groupDefinition
+  : 'group' identifier coderType?
+    '{' accessors? ( groupMemberDeclaration (groupMemberDeclaration)* ) '}';
+
 structDefinition
   : 'struct' identifier coderType?
-    '{' ( variableDeclaration ';' (variableDeclaration ';')* )? '}' ;
+    '{' accessors? ( structVariableDeclaration (structVariableDeclaration)* )? (groupDefinition (groupDefinition)*)? '}' ;
 
 modifierDefinition
   : 'modifier' identifier parameterList? ( VirtualKeyword | overrideSpecifier )* ( ';' | block ) ;
@@ -143,8 +149,15 @@ functionTypeParameter
 variableDeclaration
   : typeName storageLocation? identifier coderType?;
 
-getDeclaration : 'get' identifier? coderType?;
-setDeclaration : 'set' identifier? coderType?;
+structVariableDeclaration
+  : variableDeclaration (';' | structVariableAccessors);
+
+structVariableAccessors: '{' accessors? '}';
+
+accessors: (getDeclaration ';') | (setDeclaration ';') | (getDeclaration ';' setDeclaration ';');
+
+getDeclaration : 'get' coderType?;
+setDeclaration : 'set' coderType?;
 
 typeName
   : elementaryTypeName

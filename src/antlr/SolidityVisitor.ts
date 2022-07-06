@@ -22,6 +22,8 @@ import { CustomErrorDefinitionContext } from "./SolidityParser";
 import { TypeDefinitionContext } from "./SolidityParser";
 import { UsingForDeclarationContext } from "./SolidityParser";
 import { UsingForObjectContext } from "./SolidityParser";
+import { GroupMemberDeclarationContext } from "./SolidityParser";
+import { GroupDefinitionContext } from "./SolidityParser";
 import { StructDefinitionContext } from "./SolidityParser";
 import { ModifierDefinitionContext } from "./SolidityParser";
 import { ModifierInvocationContext } from "./SolidityParser";
@@ -39,6 +41,11 @@ import { EventParameterContext } from "./SolidityParser";
 import { FunctionTypeParameterListContext } from "./SolidityParser";
 import { FunctionTypeParameterContext } from "./SolidityParser";
 import { VariableDeclarationContext } from "./SolidityParser";
+import { StructVariableDeclarationContext } from "./SolidityParser";
+import { StructVariableAccessorsContext } from "./SolidityParser";
+import { AccessorsContext } from "./SolidityParser";
+import { GetDeclarationContext } from "./SolidityParser";
+import { SetDeclarationContext } from "./SolidityParser";
 import { TypeNameContext } from "./SolidityParser";
 import { UserDefinedTypeNameContext } from "./SolidityParser";
 import { MappingKeyContext } from "./SolidityParser";
@@ -246,6 +253,20 @@ export interface SolidityVisitor<Result> extends ParseTreeVisitor<Result> {
 	visitUsingForObject?: (ctx: UsingForObjectContext) => Result;
 
 	/**
+	 * Visit a parse tree produced by `SolidityParser.groupMemberDeclaration`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitGroupMemberDeclaration?: (ctx: GroupMemberDeclarationContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by `SolidityParser.groupDefinition`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitGroupDefinition?: (ctx: GroupDefinitionContext) => Result;
+
+	/**
 	 * Visit a parse tree produced by `SolidityParser.structDefinition`.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -363,6 +384,41 @@ export interface SolidityVisitor<Result> extends ParseTreeVisitor<Result> {
 	 * @return the visitor result
 	 */
 	visitVariableDeclaration?: (ctx: VariableDeclarationContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by `SolidityParser.structVariableDeclaration`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitStructVariableDeclaration?: (ctx: StructVariableDeclarationContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by `SolidityParser.structVariableAccessors`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitStructVariableAccessors?: (ctx: StructVariableAccessorsContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by `SolidityParser.accessors`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitAccessors?: (ctx: AccessorsContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by `SolidityParser.getDeclaration`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitGetDeclaration?: (ctx: GetDeclarationContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by `SolidityParser.setDeclaration`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitSetDeclaration?: (ctx: SetDeclarationContext) => Result;
 
 	/**
 	 * Visit a parse tree produced by `SolidityParser.typeName`.

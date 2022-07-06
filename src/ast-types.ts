@@ -118,7 +118,10 @@ export const astNodeTypes = [
   'CatchClause',
   'FileLevelConstant',
   'AssemblyMemberAccess',
-  'TypeDefinition'
+  'TypeDefinition',
+  'AccessorsDefinition',
+  'GroupMemberDeclaration',
+  'GroupDefinition'
 ] as const
 
 export type ASTNodeTypeString = typeof astNodeTypes[number]
@@ -164,7 +167,9 @@ export interface StructDefinition extends BaseASTNode {
   type: 'StructDefinition'
   name: string
   members: VariableDeclaration[]
-  coderType?: CoderType
+  coderType: CoderType
+  accessors?: AccessorsDefinition
+  groups?: GroupDefinition[]
 }
 export interface ModifierDefinition extends BaseASTNode {
   type: 'ModifierDefinition'
@@ -226,6 +231,27 @@ export interface EnumDefinition extends BaseASTNode {
   name: string
   members: EnumValue[]
 }
+
+export interface AccessorsDefinition extends BaseASTNode {
+  type: 'AccessorsDefinition'
+  getterCoderType?: CoderType
+  setterCoderType?: CoderType
+}
+
+export interface GroupMemberDeclaration extends BaseASTNode {
+  type: 'GroupMemberDeclaration'
+  name: string
+  coderType?: CoderType
+}
+
+export interface GroupDefinition extends BaseASTNode {
+  type: 'GroupDefinition'
+  accessors?: AccessorsDefinition
+  name: string
+  coderType?: CoderType
+  members: GroupMemberDeclaration[]
+}
+
 export interface VariableDeclaration extends BaseASTNode {
   type: 'VariableDeclaration'
   isIndexed: boolean
@@ -238,6 +264,7 @@ export interface VariableDeclaration extends BaseASTNode {
   expression: Expression | null
   coderType?: CoderType
   visibility?: 'public' | 'private' | 'internal' | 'default'
+  accessors?: AccessorsDefinition
 }
 export interface StateVariableDeclarationVariable extends VariableDeclaration {
   override: null | UserDefinedTypeName[]
@@ -627,6 +654,9 @@ export type ASTNode =
   | CatchClause
   | FileLevelConstant
   | TypeDefinition
+  | AccessorsDefinition
+  | GroupMemberDeclaration
+  | GroupDefinition
 
 export type AssemblyItem =
   | Identifier
