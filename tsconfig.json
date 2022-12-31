@@ -1,15 +1,26 @@
 {
-  "include": ["src/**/*.ts", "test/**/*.ts"],
+  "exclude": [
+    "**/node_modules",
+    "**/.*/",
+    "src/**/*.test.ts"
+  ],
+  "include": [
+    "src/**/*.ts",
+    "test/**/*.ts"
+  ],
   "compilerOptions": {
     "outDir": "dist",
     "allowJs": true,
     "declaration": true,
     "emitDeclarationOnly": true,
     "esModuleInterop": true,
-    "lib": ["es2016"],
-    "target": "es6",
+    "lib": [
+      "es2020"
+    ],
+    "target": "ESNext",
     "module": "commonjs",
-    "moduleResolution": "node",
+    "moduleDetection": "auto",
+    "moduleResolution": "nodenext",
     "strict": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true
